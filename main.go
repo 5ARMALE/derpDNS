@@ -52,6 +52,7 @@ func main() {
 	}
 
 	var record = Details{
+		Fetcher:   config.Record.Fetcher,
 		Zone:      config.Record.Zone,
 		SubDomain: config.Record.SubDomain,
 		FieldType: config.Record.RecordType,
@@ -78,6 +79,7 @@ type OVHConfig struct {
 
 // The RecordConfig type just maps the DNS record configuration
 type RecordConfig struct {
+	Fetcher    string `json:"fetcher"`
 	SubDomain  string `json:"subDomain"`
 	Zone       string `json:"zone"`
 	RecordType string `json:"recordType"`
@@ -100,6 +102,10 @@ func loadConfig(file string) (Config, error) {
 	err = json.Unmarshal(configContent, &config)
 	if err != nil {
 		return Config{}, err
+	}
+
+	if config.Record.Fetcher == "" {
+		config.Record.Fetcher = "http://ipinfo.io/ip"
 	}
 
 	if config.Record.SubDomain == "" || config.Record.Zone == "" || config.Record.RecordType == "" || config.OVH.ApplicationKey == "" || config.OVH.ApplicationSecret == "" || config.OVH.ConsumerKey == "" || config.OVH.Endpoint == "" {

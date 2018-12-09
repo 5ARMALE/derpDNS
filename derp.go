@@ -42,6 +42,7 @@ type Details struct {
 	Exists    bool   `json:"exists,omitempty"`
 	ActualIP  string `json:"actualip,omitempty"`
 	Target    string `json:"target,omitempty"`
+	Fetcher   string `json:"fetcher,omitempty"`
 	Zone      string `json:"zone,omitempty"`
 	FieldType string `json:"fieldType,omitempty"`
 	SubDomain string `json:"subDomain,omitempty"`
@@ -67,7 +68,7 @@ func hasChanged(actualIP string, targetIP string) bool {
 
 // GetActualIP gets your actual IP address from ipinfo.io and sets ActualIP Details attribute.
 func (d *Details) GetActualIP() {
-	resp, err := http.Get("http://ipinfo.io/ip")
+	resp, err := http.Get(d.Fetcher)
 	if err != nil {
 		log.Fatalln(err)
 	}
